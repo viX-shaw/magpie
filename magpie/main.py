@@ -145,7 +145,7 @@ class Magpie(object):
         if self.keras_model:
             print('WARNING! Overwriting already trained Keras model.',
                   file=sys.stderr)
-        else
+        else:
             self.keras_model = get_nn_model(
                 nn_model,
                 embedding=self.word2vec_model.vector_size,
