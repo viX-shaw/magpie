@@ -45,7 +45,7 @@ def cnn(embedding_size, output_length):
     model = Model(inputs=inputs, outputs=outputs)
 
     model.compile(
-        loss='sparse_categorical_crossentropy',
+        loss='binary_crossentropy',
         optimizer='adam',
         metrics=['top_k_categorical_accuracy'],
     )
