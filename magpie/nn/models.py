@@ -40,7 +40,7 @@ def cnn(embedding_size, output_length):
     merged = Concatenate()(conv_layers)
     dropout = Dropout(0.5)(merged)
     flattened = Flatten()(dropout)
-    outputs = Dense(output_length, activation='sigmoid')(flattened)
+    outputs = Dense(output_length, activation='softmax')(flattened)
 
     model = Model(inputs=inputs, outputs=outputs)
 
@@ -69,7 +69,7 @@ def rnn(embedding_size, output_length):
 
     batch_normalization = BatchNormalization()(gru)
     dropout = Dropout(0.1)(batch_normalization)
-    outputs = Dense(output_length, activation='sigmoid')(dropout)
+    outputs = Dense(output_length, activation='softmax')(dropout)
 
     model = Model(inputs=inputs, outputs=outputs)
 
