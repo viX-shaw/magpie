@@ -4,6 +4,8 @@ from keras.models import Model
 
 from magpie.config import SAMPLE_LENGTH
 
+def top_k_categorical_accuracy(y_true, y_pred, k=1):
+    return K.mean(K.in_top_k(y_pred, K.argmax(y_true, axis=-1), k), axis=-1)
 
 def get_nn_model(nn_model, embedding, output_length):
     if nn_model == 'cnn':
@@ -40,14 +42,14 @@ def cnn(embedding_size, output_length):
     merged = Concatenate()(conv_layers)
     dropout = Dropout(0.5)(merged)
     flattened = Flatten()(dropout)
-    outputs = Dense(output_length, activation='softmax')(flattened)
+    outputs = Dense(output_length, activation='sigmoid')(flattened)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     model.compile(
-        loss='binary_crossentropy',
+        loss='categorical_crossentropy',
         optimizer='adam',
-        metrics=['top_k_categorical_accuracy'],
+        metrics=[top_k_categorical_accuracy],
     )
 
     return model
