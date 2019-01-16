@@ -1,6 +1,7 @@
 from keras.layers import Input, Dense, GRU, Dropout, BatchNormalization, \
                          MaxPooling1D, Conv1D, Flatten, Concatenate
 from keras.models import Model
+import keras.backend as K
 
 from magpie.config import SAMPLE_LENGTH
 
