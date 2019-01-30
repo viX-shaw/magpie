@@ -227,7 +227,7 @@ class Magpie(object):
 
         return sorted(zipped, key=lambda elem: elem[1], reverse=True)
 
-    def init_word_vectors(self, vec_repr_model = 'WORD2VEC',train_dir, vec_dim=EMBEDDING_SIZE):
+    def init_word_vectors(self, train_dir, vec_repr_model = 'WORD2VEC', vec_dim=EMBEDDING_SIZE):
         """
         Train word2vec model and fit the scaler afterwards
         :param train_dir: directory with '.txt' files
