@@ -227,7 +227,7 @@ class Magpie(object):
 
         return sorted(zipped, key=lambda elem: elem[1], reverse=True)
 
-    def init_word_vectors(self, train_dir, vec_dim=EMBEDDING_SIZE):
+    def init_word_vectors(self, vec_repr_model = 'WORD2VEC',train_dir, vec_dim=EMBEDDING_SIZE):
         """
         Train word2vec model and fit the scaler afterwards
         :param train_dir: directory with '.txt' files
@@ -235,10 +235,11 @@ class Magpie(object):
 
         :return: None
         """
-        self.train_word2vec(train_dir, vec_dim=vec_dim)
+        
+        self.train_word2vec(train_dir, vec_repr_model, vec_dim=vec_dim)
         self.fit_scaler(train_dir)
 
-    def train_word2vec(self, train_dir, vec_dim=EMBEDDING_SIZE):
+    def train_word2vec(self, train_dir, vec_repr_model, vec_dim=EMBEDDING_SIZE):
         """
         Train the word2vec model on a directory with text files.
         :param train_dir: directory with '.txt' files
@@ -250,7 +251,7 @@ class Magpie(object):
             print('WARNING! Overwriting already trained word2vec model.',
                   file=sys.stderr)
 
-        self.word2vec_model = train_word2vec(train_dir, vec_dim=vec_dim)
+        self.word2vec_model = train_word2vec(train_dir, vec_repr_model, vec_dim=vec_dim)
 
         return self.word2vec_model
 

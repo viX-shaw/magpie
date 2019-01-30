@@ -4,7 +4,7 @@ import six
 import numpy as np
 from functools import reduce
 
-from gensim.models import Word2Vec
+from gensim.models import Word2Vec, FastText
 from sklearn.preprocessing import StandardScaler
 
 from magpie.base.document import Document
@@ -92,7 +92,7 @@ def fit_scaler(data_dir, word2vec_model, batch_size=1024, persist_to_path=None):
     return scaler
 
 
-def train_word2vec(doc_directory, vec_dim=EMBEDDING_SIZE):
+def train_word2vec(doc_directory, vec_repr_model, vec_dim=EMBEDDING_SIZE):
     """
     Train the Word2Vec object iteratively, loading stuff to memory one by one.
     :param doc_directory: directory with the documents
@@ -111,14 +111,25 @@ def train_word2vec(doc_directory, vec_dim=EMBEDDING_SIZE):
                 for sentence in d.read_sentences():
                     yield sentence
 
+    model = None
     # Initialize and train the model
-    model = Word2Vec(
-        SentenceIterator(doc_directory),
-        workers=WORD2VEC_WORKERS,
-        size=vec_dim,
-        min_count=MIN_WORD_COUNT,
-        window=WORD2VEC_CONTEXT,
-    )
+    if vec_repr_model != 'WORD2VEC':
+        print('Using FastText for building word vectors ')
+        model = FastText(
+            SentenceIterator(doc_directory),
+            workers=WORD2VEC_WORKERS,
+            size=vec_dim,
+            min_count=MIN_WORD_COUNT,
+            window=WORD2VEC_CONTEXT,
+        )
+    else:
+        model = Word2Vec(
+            SentenceIterator(doc_directory),
+            workers=WORD2VEC_WORKERS,
+            size=vec_dim,
+            min_count=MIN_WORD_COUNT,
+            window=WORD2VEC_CONTEXT,
+        )
 
     # If you don't plan to train the model any further, calling
     # init_sims will make the model much more memory-efficient.
