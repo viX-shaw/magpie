@@ -123,5 +123,6 @@ def train_word2vec(doc_directory, vec_dim=EMBEDDING_SIZE):
     # If you don't plan to train the model any further, calling
     # init_sims will make the model much more memory-efficient.
     model.init_sims(replace=True)
+    console('Model built successfully')
 
     return model
