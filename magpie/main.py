@@ -237,7 +237,7 @@ class Magpie(object):
         """
         
         self.train_word2vec(train_dir, vec_repr_model, vec_dim=vec_dim)
-        self.fit_scaler(train_dir)
+        self.fit_scaler(train_dir, vec_repr_model)
 
     def train_word2vec(self, train_dir, vec_repr_model, vec_dim=EMBEDDING_SIZE):
         """
@@ -255,7 +255,7 @@ class Magpie(object):
 
         return self.word2vec_model
 
-    def fit_scaler(self, train_dir):
+    def fit_scaler(self, train_dir, vec_repr_model):
         """
         Fit a scaler on given data. Word vectors must be trained already.
         :param train_dir: directory with '.txt' files
@@ -270,7 +270,7 @@ class Magpie(object):
             print('WARNING! Overwriting already fitted scaler.',
                   file=sys.stderr)
 
-        self.scaler = fit_scaler(train_dir, word2vec_model=self.word2vec_model)
+        self.scaler = fit_scaler(train_dir, vec_repr_model, word2vec_model=self.word2vec_model)
 
         return self.scaler
 
