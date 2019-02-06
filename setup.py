@@ -71,7 +71,7 @@ setup(
         'nltk~=3.2',
         'numpy~=1.12',
         'scipy~=0.18',
-        'gensim~=0.13',
+        'gensim~=3.7.1',
         'scikit-learn~=0.18',
         'keras~=2.1.6',
         'h5py~=2.6',
