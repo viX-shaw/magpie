@@ -5,7 +5,7 @@ import keras.backend as K
 
 from magpie.config import SAMPLE_LENGTH
 
-def top_k_categorical_accuracy(y_true, y_pred, k=1):
+def top_k_categorical_accuracy(y_true, y_pred, k=3):
     return K.mean(K.in_top_k(y_pred, K.argmax(y_true, axis=-1), k), axis=-1)
 
 def get_nn_model(nn_model, embedding, output_length):
