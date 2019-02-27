@@ -75,7 +75,7 @@ setup(
         'scikit-learn~=0.18',
         'keras~=2.1.6',
         'h5py~=2.6',
-        'tensorflow~=1.11.0'
+        'tensorflow~=1.11.0',
         'pymagnitude~=0.1.120'
     ],
 
