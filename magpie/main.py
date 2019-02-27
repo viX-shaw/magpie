@@ -20,8 +20,8 @@ from pymagnitude import Magnitude
 
 class Magpie(object):
 
-    def __init__(self, keras_model=None, word2vec_model=None, scaler=None, fasttext_model=None,
-                 labels=None):
+    def __init__(self, keras_model=None, word2vec_model=None, scaler=None,
+                 labels=None, **kwargs):
         self.labels = labels
 
         if isinstance(keras_model, string_types):
@@ -41,9 +41,9 @@ class Magpie(object):
 
         if isinstance(fasttext_model, string_types):
             print("Using fasttext model ....")
-            self.fasttext_model = Magnitude(fasttext_model)
+            self.fasttext_model = Magnitude(kwargs['fasttext_model'])
         else:
-            self.fasttext_model = fasttext_model
+            self.fasttext_model = None
 
     def train(self, train_dir, vocabulary, test_dir=None, callbacks=None,
               nn_model=NN_ARCHITECTURE, batch_size=BATCH_SIZE, test_ratio=0.0,
