@@ -145,8 +145,11 @@ class Magpie(object):
                 print("Using fasttext model (pymagnitude format)...")
 
         if not self.scaler:
-            raise RuntimeError('The scaler is not trained. ' + \
-                               'Run fit_scaler() first.')
+            if not self.fasttext_model:
+                raise RuntimeError('The scaler is not trained. ' + \
+                                'Run fit_scaler() first.')
+            else:
+                print("Vectors were normalized during training")
 
         if not os.path.isdir(train_dir):
             raise ValueError('The training directory ' + train_dir + \
