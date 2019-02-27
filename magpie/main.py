@@ -41,7 +41,7 @@ class Magpie(object):
 
         if isinstance(fasttext_model, string_types):
             print("Using fasttext model ....")
-            self.fasttext_model = Magnitude(path)
+            self.fasttext_model = Magnitude(fasttext_model)
         else:
             self.fasttext_model = fasttext_model
 
