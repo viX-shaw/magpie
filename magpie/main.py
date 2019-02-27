@@ -21,7 +21,7 @@ from pymagnitude import Magnitude
 class Magpie(object):
 
     def __init__(self, keras_model=None, word2vec_model=None, scaler=None,
-                 labels=None, **kwargs):
+                 labels=None):
         self.labels = labels
 
         if isinstance(keras_model, string_types):
@@ -39,9 +39,11 @@ class Magpie(object):
         else:
             self.scaler = scaler
 
-        if isinstance(fasttext_model, string_types):
+    def load_fasttext_model(path):
+        if isinstance(path, string_types):
             print("Using fasttext model ....")
-            self.fasttext_model = Magnitude(kwargs['fasttext_model'])
+            self.fasttext_model = Magnitude(path)
+            priint("Loaded fasttext embeddings")
         else:
             self.fasttext_model = None
 
