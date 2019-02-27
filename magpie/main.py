@@ -39,7 +39,7 @@ class Magpie(object):
         else:
             self.scaler = scaler
 
-    def load_fasttext_model(path):
+    def load_fasttext_model(self, path):
         if isinstance(path, string_types):
             print("Using fasttext model ....")
             self.fasttext_model = Magnitude(path)
