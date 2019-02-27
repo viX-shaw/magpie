@@ -78,7 +78,7 @@ def build_x_and_y(filenames, file_directory, **kwargs):
         for i, w in enumerate(words):
             if fasttext_model:
                 word_vector = fasttext_model.query(w).reshape(1, -1)
-                x_matrix[doc_id][i] = word_vector
+                x_matrix[doc_id][i] = scaler.transform(word_vector, copy=True)[0]
             elif w in word2vec_model:
                 word_vector = word2vec_model[w].reshape(1, -1)
                 x_matrix[doc_id][i] = scaler.transform(word_vector, copy=True)[0]

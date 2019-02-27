@@ -285,14 +285,17 @@ class Magpie(object):
         :return: fitted scaler object
         """
         if not self.word2vec_model:
-            raise ValueError('word2vec model is not trained. ' + \
-                             'Run train_word2vec() first.')
+            if not self.fasttext_model:
+                raise RuntimeError('word2vec model is not trained. ' + \
+                                'Run train_word2vec() or train fasttext model first.')
+            else:
+                print("Using fasttext model (pymagnitude format)...")
 
         if self.scaler:
             print('WARNING! Overwriting already fitted scaler.',
                   file=sys.stderr)
 
-        self.scaler = fit_scaler(train_dir, vec_repr_model, word2vec_model=self.word2vec_model)
+        self.scaler = fit_scaler(train_dir, self.fasttext_model, word2vec_model=self.word2vec_model)
 
         return self.scaler
 
