@@ -13,7 +13,7 @@ from magpie.utils import get_answers_for_doc, load_from_disk
 
 def get_data_for_model(train_dir, labels, test_dir=None, nn_model=None,
                        as_generator=False, batch_size=BATCH_SIZE,
-                       word2vec_model=None, scaler=None):
+                       word2vec_model=None,fasttext_model=None, scaler=None):
     """
     Get data in the form of matrices or generators for both train and test sets.
     :param train_dir: directory with train files
@@ -23,6 +23,7 @@ def get_data_for_model(train_dir, labels, test_dir=None, nn_model=None,
     :param as_generator: flag whether to return a generator or in-memory matrix
     :param batch_size: integer, size of the batch
     :param word2vec_model: trained w2v gensim model
+    :param fasttext_model: trained fasttext model(format pymagnitude)
     :param scaler: scaling object for X matrix normalisation e.g. StandardScaler
 
     :return: tuple with 2 elements for train and test data. Each element can be
@@ -32,6 +33,7 @@ def get_data_for_model(train_dir, labels, test_dir=None, nn_model=None,
     kwargs = dict(
         label_indices={lab: i for i, lab in enumerate(labels)},
         word2vec_model=word2vec_model,
+        fasttext_model=fasttext_model,
         scaler=scaler,
         nn_model=nn_model,
     )
@@ -62,6 +64,7 @@ def build_x_and_y(filenames, file_directory, **kwargs):
     """
     label_indices = kwargs['label_indices']
     word2vec_model = kwargs['word2vec_model']
+    fasttext_model = kwargs['fasttext_model']
     scaler = kwargs['scaler']
     nn_model = kwargs['nn_model']
 
@@ -73,7 +76,10 @@ def build_x_and_y(filenames, file_directory, **kwargs):
         words = doc.get_all_words()[:SAMPLE_LENGTH]
 
         for i, w in enumerate(words):
-            if w in word2vec_model:
+            if fasttext_model:
+                word_vector = fasttext_model.query(w).reshape(1, -1)
+                x_matrix[doc_id][i] = word_vector
+            elif w in word2vec_model:
                 word_vector = word2vec_model[w].reshape(1, -1)
                 x_matrix[doc_id][i] = scaler.transform(word_vector, copy=True)[0]
 

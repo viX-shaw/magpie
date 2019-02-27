@@ -15,10 +15,12 @@ from magpie.nn.input_data import get_data_for_model
 from magpie.nn.models import get_nn_model
 from magpie.utils import save_to_disk, load_from_disk
 
+from pymagnitude import Magnitude
+
 
 class Magpie(object):
 
-    def __init__(self, keras_model=None, word2vec_model=None, scaler=None,
+    def __init__(self, keras_model=None, word2vec_model=None, scaler=None,fasttext_model=None,
                  labels=None):
         self.labels = labels
 
@@ -36,6 +38,12 @@ class Magpie(object):
             self.load_scaler(scaler)
         else:
             self.scaler = scaler
+
+        if isinstance(fasttext_model, string_types):
+            print("Using fasttext model ....")
+            self.fasttext_model = Magnitude(path)
+        else:
+            self.fasttext_model = fasttext_model
 
     def train(self, train_dir, vocabulary, test_dir=None, callbacks=None,
               nn_model=NN_ARCHITECTURE, batch_size=BATCH_SIZE, test_ratio=0.0,
@@ -81,7 +89,7 @@ class Magpie(object):
         self.labels = vocabulary
         self.keras_model = get_nn_model(
             nn_model,
-            embedding=self.word2vec_model.vector_size,
+            embedding=self.word2vec_model.vector_size if self.word2vec_model else self.fasttext_model.dim,
             output_length=len(vocabulary)
         )
 
@@ -93,6 +101,7 @@ class Magpie(object):
             as_generator=False,
             batch_size=batch_size,
             word2vec_model=self.word2vec_model,
+            fasttext_model=self.fasttext_model,
             scaler=self.scaler,
         )
 
@@ -127,8 +136,11 @@ class Magpie(object):
         """
 
         if not self.word2vec_model:
-            raise RuntimeError('word2vec model is not trained. ' + \
-                               'Run train_word2vec() first.')
+            if not self.fasttext_model:
+                raise RuntimeError('word2vec model is not trained. ' + \
+                                'Run train_word2vec() or train fasttext model first.')
+            else:
+                print("Using fasttext model (pymagnitude format)...")
 
         if not self.scaler:
             raise RuntimeError('The scaler is not trained. ' + \
@@ -148,7 +160,7 @@ class Magpie(object):
         else:
             self.keras_model = get_nn_model(
                 nn_model,
-                embedding=self.word2vec_model.vector_size,
+                embedding=self.word2vec_model.vector_size if self.word2vec_model else self.fasttext_model.dim,
                 output_length=len(vocabulary)
             )
 
@@ -162,6 +174,7 @@ class Magpie(object):
             as_generator=True,
             batch_size=batch_size,
             word2vec_model=self.word2vec_model,
+            fasttext_model=self.fasttext_model,
             scaler=self.scaler,
         )
 
@@ -211,7 +224,11 @@ class Magpie(object):
         x_matrix = np.zeros((1, sample_length, embedding_size))
 
         for i, w in enumerate(words):
-            if w in self.word2vec_model:
+            if fasttext_model:
+                print("Using fasttext model ....")
+                word_vector = fasttext_model.query(w).reshape(1, -1)
+                x_matrix[doc_id][i] = word_vector
+            elif w in self.word2vec_model:
                 word_vector = self.word2vec_model[w].reshape(1, -1)
                 scaled_vector = self.scaler.transform(word_vector, copy=True)[0]
                 x_matrix[doc.doc_id][i] = scaled_vector
@@ -255,7 +272,7 @@ class Magpie(object):
 
         return self.word2vec_model
 
-    def fit_scaler(self, train_dir, vec_repr_model):
+    def fit_scaler(self, train_dir, ):
         """
         Fit a scaler on given data. Word vectors must be trained already.
         :param train_dir: directory with '.txt' files

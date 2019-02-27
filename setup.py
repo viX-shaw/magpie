@@ -76,6 +76,7 @@ setup(
         'keras~=2.1.6',
         'h5py~=2.6',
         'tensorflow~=1.11.0'
+        'pymagnitude~=0.1.120'
     ],
 
     # List additional groups of dependencies here (e.g. development
