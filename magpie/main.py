@@ -20,7 +20,7 @@ from pymagnitude import Magnitude
 
 class Magpie(object):
 
-    def __init__(self, keras_model=None, word2vec_model=None, scaler=None,fasttext_model=None,
+    def __init__(self, keras_model=None, word2vec_model=None, scaler=None, fasttext_model=None,
                  labels=None):
         self.labels = labels
 
