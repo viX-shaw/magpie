@@ -39,11 +39,11 @@ class Magpie(object):
         else:
             self.scaler = scaler
 
-    def load_fasttext_model(self, path):
+    def load_fasttext_model(self, path=None):
         if isinstance(path, string_types):
             print("Using fasttext model ....")
             self.fasttext_model = Magnitude(path)
-            priint("Loaded fasttext embeddings")
+            print("Loaded fasttext embeddings")
         else:
             self.fasttext_model = None
 
@@ -274,7 +274,7 @@ class Magpie(object):
 
         return self.word2vec_model
 
-    def fit_scaler(self, train_dir, ):
+    def fit_scaler(self, train_dir):
         """
         Fit a scaler on given data. Word vectors must be trained already.
         :param train_dir: directory with '.txt' files
