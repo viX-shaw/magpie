@@ -68,7 +68,7 @@ def build_x_and_y(filenames, file_directory, **kwargs):
     scaler = kwargs['scaler']
     nn_model = kwargs['nn_model']
 
-    x_matrix = np.zeros((len(filenames), SAMPLE_LENGTH, word2vec_model.vector_size))
+    x_matrix = np.zeros((len(filenames), SAMPLE_LENGTH, len(fasttext_model)))
     y_matrix = np.zeros((len(filenames), len(label_indices)), dtype=np.bool_)
 
     for doc_id, fname in enumerate(filenames):
