@@ -229,7 +229,7 @@ class Magpie(object):
         x_matrix = np.zeros((1, sample_length, embedding_size))
 
         for i, w in enumerate(words):
-            if fasttext_model:
+            if self.fasttext_model:
                 print("Using fasttext model ....")
                 word_vector = fasttext_model.query(w).reshape(1, -1)
                 scaled_vector = self.scaler.transform(word_vector, copy=True)[0]
