@@ -232,7 +232,8 @@ class Magpie(object):
             if fasttext_model:
                 print("Using fasttext model ....")
                 word_vector = fasttext_model.query(w).reshape(1, -1)
-                x_matrix[doc_id][i] = word_vector
+                scaled_vector = self.scaler.transform(word_vector, copy=True)[0]
+                x_matrix[doc_id][i] = scaled_vector
             elif w in self.word2vec_model:
                 word_vector = self.word2vec_model[w].reshape(1, -1)
                 scaled_vector = self.scaler.transform(word_vector, copy=True)[0]
